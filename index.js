@@ -1,39 +1,32 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors");
+const bodyParser = require("body-parser");
+const cors = require("cors"); // Import CORS
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS with explicit settings
+// Enable CORS for all origins with detailed options
 app.use(
   cors({
-    origin: "*", // Allow all origins
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allowed HTTP methods
-    allowedHeaders: "Content-Type, Authorization", // Allowed headers
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+    origin: "*", // Allows all origins
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow specific methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow headers
+    credentials: true, // Allow cookies if needed
   })
 );
 
-// Handle preflight requests explicitly
-app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.sendStatus(204); // No content response for preflight requests
-});
-
 // Middleware
+// MongoDB Connection
 mongoose.connect(
-  process.env.MONGO_URI ||
-    "mongodb+srv://abcd:abcd@cluster0.slbdray.mongodb.net/Khatadb?retryWrites=true&w=majority",
+  "mongodb+srv://abcd:abcd@cluster0.slbdray.mongodb.net/Khatadb?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }
 );
 
-app.use(express.json());
+app.use(bodyParser.json());
 // Define MongoDB Schemas and Models
 const profileSchema = new mongoose.Schema({
   phoneNumber: String,
