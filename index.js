@@ -6,8 +6,15 @@ const cors = require("cors"); // Import CORS
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS for all origins
-app.use(cors());
+// Enable CORS for all origins with detailed options
+app.use(
+  cors({
+    origin: "*", // Allows all origins
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow specific methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow headers
+    credentials: true, // Allow cookies if needed
+  })
+);
 
 // Middleware
 // MongoDB Connection
@@ -18,6 +25,7 @@ mongoose.connect(
     useUnifiedTopology: true,
   }
 );
+
 app.use(bodyParser.json());
 // Define MongoDB Schemas and Models
 const profileSchema = new mongoose.Schema({
