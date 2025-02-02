@@ -7,26 +7,20 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Enable CORS for all origins with detailed options
-app.use(
-  cors({
-    origin: "*", // Allows all origins
-    methods: "*", // Allow specific methods
-    allowedHeaders: "*", // Allow headers
-    credentials: "*", // Allow cookies if needed
-  })
-);
+app.use(cors());
 
 // Middleware
 // MongoDB Connection
 mongoose.connect(
-  "mongodb+srv://abcd:abcd@cluster0.slbdray.mongodb.net/Khatadb?retryWrites=true&w=majority",
+  process.env.MONGO_URI ||
+    "mongodb+srv://abcd:abcd@cluster0.slbdray.mongodb.net/Khatadb?retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }
 );
 
-app.use(bodyParser.json());
+app.use(express.json());
 // Define MongoDB Schemas and Models
 const profileSchema = new mongoose.Schema({
   phoneNumber: String,
